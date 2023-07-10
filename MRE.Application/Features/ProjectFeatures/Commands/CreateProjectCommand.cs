@@ -2,6 +2,7 @@
 using MRE.Application.Features.UserFeatures.Commands;
 using MRE.Contracts.Dtos;
 using MRE.Contracts.Models;
+using MRE.Presistence.Abstruct;
 
 namespace MRE.Application.Features.ProjectFeatures.Commands
 {
@@ -16,10 +17,35 @@ namespace MRE.Application.Features.ProjectFeatures.Commands
 
         public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, CqrsResponse>
         {
-            public Task<CqrsResponse> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
+            private readonly IProjectRepository _repository;
+
+            public CreateProjectCommandHandler(IProjectRepository repository)
             {
-                throw new NotImplementedException();
+                _repository = repository;
             }
+
+            public async Task<CqrsResponse> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
+            {
+                var project = await Task.Run(() => _repository.Create(request.ProjectModel));
+                if(project == null)
+                {
+                    return new CqrsResponse
+                    {
+                        StatusCode = System.Net.HttpStatusCode.BadRequest,
+                        ErrorMessage = "Record not created"
+                    };
+                }
+
+                return new CreateProjectCommandResult
+                {
+                    Id = project.Id
+                };
+            }
+        }
+
+        public class CreateProjectCommandResult : CqrsResponse
+        {
+            public Guid Id { get; set; }
         }
     }
 }

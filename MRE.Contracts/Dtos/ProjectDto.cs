@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRE.Contracts.Models
+namespace MRE.Contracts.Dtos
 {
-    public class ProjectModel
+    public class ProjectDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

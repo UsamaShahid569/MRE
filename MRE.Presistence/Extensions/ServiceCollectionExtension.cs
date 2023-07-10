@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MRE.Presistence.Abstruct;
+using MRE.Presistence.Concrete;
 
 namespace MRE.Presistence.Extensions
 {
@@ -19,6 +21,11 @@ namespace MRE.Presistence.Extensions
             //var context = new CustomAssemblyLoadContext();
             //context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "LibwkHtml", "libwkhtmltox.dll"));
 
+            return services;
+        }
+        public static IServiceCollection AddProjectConfig(this IServiceCollection services)
+        {
+            services.AddScoped<IProjectRepository, ProjectRpository>();
             return services;
         }
     }
